@@ -1,0 +1,65 @@
+class Solution(object):
+    def findAnagrams(self, s, p):
+        """
+        :type s: str
+        :type p: str
+        :rtype: List[int]
+        """
+        
+        # make a dict of count of letters
+        count_letters = {}
+        
+        for letter in p:
+            if letter not in count_letters:
+                count_letters[letter] = 0
+            count_letters[letter] += 1
+        
+        total_count = len(count_letters)
+        
+        k = len(p)
+        
+        i, j = 0, 0
+        
+        answer = []
+        
+        # print(count_letters, total_count)
+        
+        while j < len(s):
+            
+            # for j elements
+            # keep decrementing the count from the dict
+            # and if it reaches 0, we decrement count by 1
+            
+            if s[j] in count_letters:
+                count_letters[s[j]] -= 1
+                if count_letters[s[j]] == 0:
+                    total_count -= 1
+            
+            # check if window size is reached
+            
+            if j - i + 1 < k:
+                j += 1
+                
+            elif j - i + 1 == k:
+                # we have hit the window
+                
+                # check if count of distinct characters is zero
+                # if yes, it is an anagram
+                
+                if total_count == 0:
+                    answer.append(i)
+                    
+                # reverse the calculations done at j so far
+                # increment the character count
+                
+                if s[i] in count_letters:
+                    count_letters[s[i]] += 1
+                    if count_letters[s[i]] == 1:
+                        total_count += 1
+                        
+                # slide the window
+                i += 1
+                j += 1
+                
+        return answer
+
